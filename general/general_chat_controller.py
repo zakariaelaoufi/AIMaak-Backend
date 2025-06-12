@@ -91,6 +91,9 @@ async def get_chatbot_history(request: Request):
 
 @router.post("", status_code=status.HTTP_200_OK)
 async def post_chatbot_response(request: Request, query: dict = Body(...)):
+
+    print(f"Received body: {query}")
+
     redis = request.app.state.redis
     message = query.get("question")
 
@@ -115,7 +118,6 @@ async def post_chatbot_response(request: Request, query: dict = Body(...)):
     except Exception as e:
         return {"error": f"Failed to generate response: {e}"}
     
-    print(f"AI Response: {answer}")
 
     # Save updated history
     history.append(HumanMessage(content=message))
